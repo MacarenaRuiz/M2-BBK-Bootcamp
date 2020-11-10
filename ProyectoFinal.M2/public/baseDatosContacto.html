@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="camle.css">
+    <title>Base Datos Contacto</title>
+</head>
+
+<body>
+    <div>
+        <div>
+            <p>Base de Datos del Administrador</p>
+        </div>
+        <div id="mensaje"></div>
+        <a href="index.html" id="enlace-arriba">Volver a Página Principal</a>
+    </div>
+
+
+
+    <script>
+        //GET
+        fetch('/camle-info')
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (contacto) {
+                for (let i = 0; i < contacto.length; i++) {
+                    console.log(contacto);
+                    document.getElementById("mensaje").innerHTML +=
+                        `<div><p><strong>${contacto[i].nombre}</strong></p>
+                        <p>${contacto[i].apellido}</p>
+                        <p>${contacto[i].telefono}</p>
+                        <p>${contacto[i].correo}</p>
+                        <p>${contacto[i].comentario}</p>
+                        
+                        <a href="" onclick="eliminarContacto('${contacto[i].apellido}')">Eliminar Contacto</a>  
+                        </div>`
+                }
+            })
+        // onclick: '${contacto[i].apellido}'--> 
+
+
+        //DELETE
+        function eliminarContacto(apellido) {
+            event.preventDefault(); //previene el comportamiento por defecto de href
+            console.log(apellido);
+            fetch(`/eliminarContacto/${apellido}`, { method: "DELETE" }
+            )
+                .then(function (respuesta) {
+                    return respuesta.json();
+                })
+                .then(function (contacto) {
+
+                    document.getElementById("mensaje").innerHTML = '';  //Lo pone a cero y luego ya imprime lo que hay así hace que no se repita en el html
+                    for (let i = 0; i < contacto.length; i++) {
+                        console.log(contacto);
+                        document.getElementById("mensaje").innerHTML +=
+                            `<div><p><strong>${contacto[i].nombre}</strong></p>
+                        <p>${contacto[i].apellido}</p>
+                        <p>${contacto[i].telefono}</p>
+                        <p>${contacto[i].correo}</p>
+                        <p>${contacto[i].comentario}</p>
+                        
+                        <a href="" onclick="eliminarContacto('${contacto[i].apellido}')">Eliminar Contacto</a>  
+                        </div>`
+                    }
+                })
+        }
+    </script>
+</body>
+
+</html>

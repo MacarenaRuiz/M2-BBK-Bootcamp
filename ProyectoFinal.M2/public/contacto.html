@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="camle.css">
+    <link rel="stylesheet" href="baseDatosContacto.html">
+    <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Indie+Flower&display=swap" rel="stylesheet">
+
+</head>
+
+<body>
+    <div id="contactoHoja">
+        <div id="caja-contacto">
+
+            <div id="formularioContactoCss">
+                <p>Podéis hacer vuestra solicitud de cita previa con este formulario, para conocernos y visitar el
+                    centro.
+                    Enviad vuestra solicitud y nos pondremos en contacto para concretar la reunión.
+                </p>
+                <p>
+                    ¡Os esperamos!
+                </p>
+
+                <p>Para solicitar información es necesario rellenar todos los campos</p>
+
+
+                <P><strong>Datos de la madre o padre:</strong></p>
+                <label for="nombreMadre">Nombre de la madre o padre *</label>
+                <input type="text" id="nombreMadre" name="nombreMadre" placeholder="">
+
+                <label for="apellidoMadre">Apellidos de la madre o padre *</label>
+                <input type="text" id="apellidoMadre" name="apellidoMadre" placeholder="">
+
+                <label for="fechaNacimiento">Fecha de Nacimiento del niño/a *</label>
+                <input type="date" id="fechaNacimiento" name="fechaNacimiento" value="2018-07-22" min="2014-01-01"
+                    max="2020-06-15">
+
+                <p> <strong>Datos de Contacto:</strong></p>
+
+                <label for="telefono">Teléfono *</label>
+                <input type="text" id="telefono" name="telefono" placeholder="">
+
+                <label for="correo">Correo-electrónico *</label>
+                <input type="text" id="correo" name="correo" placeholder="">
+
+                <label for="comentario">Comentarios *</label>
+                <textarea name="comentario" id="comentario" cols="30" rows="10"></textarea>
+
+                <button onclick="enviarContacto()" id="button">Enviar</button>
+                <div id="contactos"></div>
+            </div>
+
+            <div id="contactoDire">
+                <p><strong>GUARDERIA CAMLE S.C.</strong></p>
+
+                <p>+52 866 177 2111</p>
+                <p>camlevidencias@hotmail.com</p>
+                <p>Vasco de Quiroga
+                    Loma Linda
+                    Monclova, Coah.
+                    México</p>
+                <p>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2527.748670072154!2d-101.44445397662327!3d26.861447283135732!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x868bd18f961fc49f%3A0xd5ddd1973c6e0879!2sGuarder%C3%ADa%20CAMLE%20SC!5e0!3m2!1ses!2ses!4v1586882335399!5m2!1ses!2ses"
+                        width="350" height="350" frameborder="0" style="border:0;" allowfullscreen=""
+                        aria-hidden="false" tabindex="0"></iframe>
+                </p>
+            </div>
+        </div>
+
+        <div>
+            <p>
+                <a href="baseDatosContacto.html">Base de Datos del Administrador</a>
+            </p>
+        </div>
+    </div>
+
+    <a href="index.html" id="enlace-arriba">Volver a Página Principal</a>
+
+    <script>
+        //Post
+        function enviarContacto() {
+            //8. Coge los datso y los hago objeto
+            let nombre = document.getElementById('nombreMadre').value;
+            let apellido = document.getElementById('apellidoMadre').value;
+            let fechaNacimiento = document.getElementById('fechaNacimiento').value;
+            let telefono = document.getElementById('telefono').value;
+            let correo = document.getElementById('correo').value;
+            let comentario = document.getElementById('comentario').value;
+
+            let contacto = {
+                nombre: nombre,
+                apellido: apellido,
+                fechaNacimiento: fechaNacimiento,
+                telefono: telefono,
+                correo: correo,
+                comentario: comentario
+            }
+            // 8.1. Hacemos un fetch a la ruta definida en el servidor
+            console.log(contacto);
+            fetch('/contacto', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(contacto)
+            })
+                .then(function (res) {
+                    return res.json();
+                })
+                .then(function (mensaje) {
+                    window.alert( "La solicitud se ha envidiado correctamente, gracias por su interés");
+                })
+        }
+
+        //Get
+        fetch('/api/camle-info')
+            .then(function (res) {
+                return res.json();
+            })
+            .then(function (mensaje) {
+                console.log(db.collection('camle-info').find().toArray(function (err, respuesta) {
+                    if (err !== null) {
+                        console.log(err);
+                        res.send(err);
+
+                    } else {
+
+                        res.send(
+                            window.alert("Su mensaje ha sido enviado correctamente, gracias por su interés")
+                            /*
+                                                        `<div><p><strong>${contacto[i].nombre}</strong></p>
+                                                    <p>${contacto[i].apellido}</p>
+                                                    <p>${contacto[i].telefono}</p>
+                                                    <p>${contacto[i].correo}</p>
+                                                    <p>${contacto[i].comentario}</p>
+                                                </div>`
+                                                */
+                        );
+                    }
+                }
+                ));
+            });
+
+    </script>
+
+
+
+</body>
+
+</html>
